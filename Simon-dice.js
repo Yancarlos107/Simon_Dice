@@ -7,6 +7,7 @@ const Ultimo_Nivel = 10
 
 class Juego {
     constructor() {
+        this.inicializar = this.inicializar.bind(this)
         this.inicializar()
         this.generarSecuencia()
         this.siguienteNivel()
@@ -15,13 +16,21 @@ class Juego {
     inicializar(){
         this.siguienteNivel = this.siguienteNivel.bind(this)
         this.elegirColor = this.elegirColor.bind(this)
-        btnEmpezar.classList.add('hide')
+        this.toogleBtnEmpezar()
         this.nivel =1
         this.colores = {
           celeste,
           violeta,
           naranja,
           verde
+        }
+    }
+
+    toogleBtnEmpezar() {
+        if(btnEmpezar.classList.contains('hide')){
+            btnEmpezar.classList.remove('hide')
+        } else {
+            btnEmpezar.classList.add('hide')
         }
     }
 
@@ -100,15 +109,28 @@ class Juego {
                 this.nivel++
                 this.eliminarEventosClick()
                 if (this.nivel ===(Ultimo_Nivel + 1)) {
-                    //Ganó!
+                    this.ganoElJuego()
                 }
                 else{
                     setTimeout(this.siguienteNivel, 2000)
                     }
             }
         } else {
-            //Perdio!!
+            this.perdioEljuego()
         }
+    }
+
+    ganoElJuego() {
+        swal('Felicitaciones', '¡Ganaste!', 'success')
+            .then(this.inicializar)
+    }
+
+    perdioEljuego() {
+        swal('Lo lamento', '¡Has perdido!', 'error')
+        .then(() => { 
+            this.eliminarEventosClick()
+            this.inicializar()
+        })
     }
 }
 
